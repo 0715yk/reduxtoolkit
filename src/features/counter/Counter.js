@@ -1,66 +1,54 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from './counterSlice';
-import styles from './Counter.module.css';
+import React, { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement, changeDummyData } from "./counterSlice";
+import { createSelector } from "@reduxjs/toolkit";
 
 export function Counter() {
-  const count = useSelector(selectCount);
   const dispatch = useDispatch();
-  const [incrementAmount, setIncrementAmount] = useState('2');
 
-  const incrementValue = Number(incrementAmount) || 0;
+  // const value = useSelector((state) => state.counter.value);
 
+  // const func = createSelector(
+  //   (state) => state.counter.dummyData,
+  //   (dummyData) => {
+  //     return dummyData.split("");
+  //   }
+  // );
+
+  // const dummyArray = useSelector(func);
+  const dummyArray = useSelector((state) => state.counter.dummyData);
+
+  const array = useMemo(() => {
+    return dummyArray.split("");
+  }, [dummyArray]);
   return (
     <div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <span className={styles.value}>{count}</span>
-        <button
-          className={styles.button}
+      <div>
+        <input
+          type="text"
+          onChange={(e) => {
+            dispatch(changeDummyData(e.target.value));
+          }}
+        />
+        {/* <button
           aria-label="Increment value"
           onClick={() => dispatch(increment())}
         >
           +
         </button>
-      </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={(e) => setIncrementAmount(e.target.value)}
-        />
+
         <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
+          aria-label="Decrement value"
+          onClick={() => dispatch(decrement())}
         >
-          Add Amount
+          -
         </button>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
-        >
-          Add Async
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementIfOdd(incrementValue))}
-        >
-          Add If Odd
-        </button>
+        <span>{value}</span> */}
+        <div>
+          {array.map((el) => (
+            <div>{el}</div>
+          ))}
+        </div>
       </div>
     </div>
   );
